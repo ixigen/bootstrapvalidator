@@ -130,6 +130,10 @@
                         that.$form.off('submit.bv').submit();
                     }
                 });
+                
+            
+	    // Store original fields options
+	    this.options.originalFields = $.extend({},this.options.fields);
 
             for (var field in this.options.fields) {
                 this._initField(field);
@@ -691,7 +695,11 @@
             if (!this._cacheFields[field]) {
                 this._cacheFields[field] = (this.options.fields[field] && this.options.fields[field].selector)
                                          ? $(this.options.fields[field].selector)
-                                         : this.$form.find('[name="' + field + '"]');
+			                 // Check if field option is stored into original fields options
+			                 : (this.options.originalFields[field] && this.options.originalFields[field].selector
+						?$(this.options.originalFields[field].selector)
+						:this.$form.find('[name="' + field + '"]')
+					 );
             }
 
             return this._cacheFields[field];
